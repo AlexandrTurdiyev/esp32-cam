@@ -38,7 +38,11 @@
 
 #define  DEBUG 1
 #define  HTTP_PORT              80
-#define  SEND_NARODMON_DELAY    (60*1000*1)         // ms
+#define  SEND_NARODMON_DELAY    (60*1000*15)         // ms
+
+const char *apSSID = "ESP32-CAM-AP";
+const char *apPassword = "password123";
+
 const char *key =               "a7lr8muo";         // Put your API Key here "KEY"!!!
 const char *ssid =              "TP-Link_1F5C";             // Put your SSID here
 const char *password =          "01998757";          // Put your PASSWORD here
@@ -152,10 +156,17 @@ void update_image(void)
 //++++++++++++++++++++++++++++++++++++++++++++++ setup ++++++++++++++++++++++++++++++++++++++++++++++++++++//
 //=========================================================================================================//
 void setup() {
+
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
  
   Serial.begin(500000);
   Serial.setDebugOutput(false);
+
+  // Инициализация режима точки доступа
+  WiFi.softAP(apSSID, apPassword);
+  Serial.println("AP mode enabled");
+  Serial.print("AP IP address: ");
+  Serial.println(WiFi.softAPIP());
   
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;

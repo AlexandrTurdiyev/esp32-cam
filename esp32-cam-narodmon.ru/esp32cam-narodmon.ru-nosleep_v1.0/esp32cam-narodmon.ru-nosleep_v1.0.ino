@@ -38,10 +38,10 @@
 
 #define  DEBUG 1
 #define  HTTP_PORT              80
-#define  SEND_NARODMON_DELAY    (60*1000*1)         // ms
-const char *key =               "a7lr8muo";         // Put your API Key here "KEY"!!!
-const char *ssid =              "TP-Link_1F5C";             // Put your SSID here
-const char *password =          "01998757";          // Put your PASSWORD here
+#define  SEND_NARODMON_DELAY    (60*1000*15)         // ms
+const char *key =               "********";         // Put your API Key here "KEY"!!!
+const char *ssid =              "********";             // Put your SSID here
+const char *password =          "********";          // Put your PASSWORD here
 const char *ntpServer =         "pool.ntp.org";
 const char *request_content = "--------------------------ef73a32d43e7f04d\r\n"
                         "Content-Disposition: form-data; name=\"%s\"; filename=\"%s.jpg\"\r\n"

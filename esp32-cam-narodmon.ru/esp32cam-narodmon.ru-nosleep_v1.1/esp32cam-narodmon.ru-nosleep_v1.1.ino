@@ -12,6 +12,7 @@
 #include "esp_timer.h"
 #include "Arduino.h"
 #include "soc/rtc_cntl_reg.h"  
+#include <ESPAsyncWebSrv.h> // #myWebServer
 
 // Модель камеры
 #define CAMERA_MODEL_AI_THINKER
@@ -38,7 +39,7 @@
 
 #define  DEBUG 1
 #define  HTTP_PORT              80
-#define  SEND_NARODMON_DELAY    (60*1000*15)         // ms
+#define  SEND_NARODMON_DELAY    (60*1000*1)         // ms
 
 const char *apSSID = "ESP32-CAM-AP";
 const char *apPassword = "password123";
@@ -56,6 +57,9 @@ const long gmtOffset_sec =      3600;
 const int daylightOffset_sec =  3600;
 unsigned long last_time_ms = 0;
 camera_fb_t * fb = NULL;
+
+AsyncWebServer myWebServer(88); // #myWebServer
+
 WiFiClient client;
 IPAddress server(185,245,187,136);
 //=========================================================================================================//
@@ -156,7 +160,6 @@ void update_image(void)
 //++++++++++++++++++++++++++++++++++++++++++++++ setup ++++++++++++++++++++++++++++++++++++++++++++++++++++//
 //=========================================================================================================//
 void setup() {
-
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
  
   Serial.begin(500000);
@@ -210,6 +213,17 @@ void setup() {
   
   if(DEBUG)Serial.println(WiFi.localIP());
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+
+  
+    myWebServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    String html = "<html><body>";
+    html += "<p>Signal Strength: " + String(WiFi.RSSI()) + " dBm</p>";
+    html += "</body></html>";
+    request->send(200, "text/html", html);
+  });
+
+  // Запуск веб-сервера
+  myWebServer.begin();
 }
 //=========================================================================================================//
 //+++++++++++++++++++++++++++++++++++++++++++++ main ++++++++++++++++++++++++++++++++++++++++++++++++++++++//

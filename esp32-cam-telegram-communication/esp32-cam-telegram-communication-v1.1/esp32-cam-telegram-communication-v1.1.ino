@@ -127,7 +127,13 @@ void handleNewMessages(int numNewMessages) {
     }
     if (text == "/photo") {
       sendPhoto = true;
-            Serial.println("New photo request");
+      Serial.println("New photo request");
+    }
+     if (text == "/wifi") {
+      int wifiSignalStrength = WiFi.RSSI(); // Get Wi-Fi signal strength
+      String wifiMessage = "Wi-Fi Signal Strength: " + String(wifiSignalStrength) + " dBm";
+      bot.sendMessage(CHAT_ID, wifiMessage, "");
+      Serial.println("Wi-Fi signal strength sent");
     }
   }
 }
